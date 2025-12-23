@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { browser } from "$app/environment";
 
-  import { Skull, X } from '@lucide/svelte';
+  // import { Skull, X } from '@lucide/svelte';
 
   export let isOpen = false;
   export let title = "";
@@ -68,7 +68,7 @@
 
           {#if showCloseButton}
             <!-- <button class="size-4 bg-black" on:click={close}> </button> -->
-            <button class="size-6" on:click={close}>{X}</button>
+            <button class="size-6" on:click={close}>×</button>
           {/if}
         </div>
       {/if}

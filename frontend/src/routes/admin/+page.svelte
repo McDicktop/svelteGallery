@@ -11,7 +11,7 @@
   let isUploading = false;
 
   function handleImageSelect(e) {
-    console.log(e.target.files[0])
+    console.log(e.target.files[0]);
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -30,52 +30,53 @@
   }
 
   async function handleSubmit() {
-	if(!new_image_title.trim()) {
-		alert('Введите название изображения');
-		return;
-	}
+    if (!new_image_title.trim()) {
+      alert("Введите название изображения");
+      return;
+    }
 
-	if(!selectedImage) {
-		alert('Пожалуйста, выберите изображение');
-		return;
-	}
+    if (!selectedImage) {
+      alert("Пожалуйста, выберите изображение");
+      return;
+    }
 
-	isUploading = true;
+    isUploading = true;
 
-	try{
-		const formData = new FormData();
-		formData.append('title', new_image_title);
-		formData.append('image', selectedImage);
+    try {
+      const formData = new FormData();
 
-		const result = await postImage(formData);
+      formData.append("content", JSON.stringify({ title: new_image_title }));
+      formData.append("image", selectedImage);
 
-		// дома дописать обновление стора images 'refresh'
+      const result = await postImage(formData);
 
-		isModalOpen = false;
-		resetForm();
+      // дома дописать обновление стора images 'refresh'
 
-		alert('Изображение успешно загружено')
-	} catch(error) {
-		console.error('Ошибка загрузки: ', error);
-		alert('Ошибка при загрузке изображения');
-	} finally {
-		isUploading = false;
-	}
+      isModalOpen = false;
+      resetForm();
+
+      alert("Изображение успешно загружено");
+    } catch (error) {
+      console.error("Ошибка загрузки: ", error);
+      alert("Ошибка при загрузке изображения");
+    } finally {
+      isUploading = false;
+    }
   }
 
   function resetForm() {
-	new_image_title = '';
-	selectedImage = null;
+    new_image_title = "";
+    selectedImage = null;
 
-	if(previewUrl) {
-		URL.revokeObjectURL(previewUrl);
-		previewUrl = null;
-	}
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+    }
   }
 
-  function handleModalClose() {
-	resetForm();
-  }
+  // function handleModalClose() {
+  //   resetForm();
+  // }
 </script>
 
 <main>
@@ -112,7 +113,8 @@
     bind:isOpen={isModalOpen}
     title="Add new"
     on:close={() => {
-      new_image_title = "";
+      // new_image_title = "";
+      resetForm();
     }}
   >
     <form on:submit|preventDefault={handleSubmit} class="flex flex-col gap-4">
@@ -130,7 +132,9 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="img_src" class="font-medium">Choose image</label>
+        <label for="img_src" class="font-medium cursor-pointer w-fit"
+          >Choose image</label
+        >
         {#if previewUrl}
           <div
             class="relative w-full h-48 border-2 border-dashed rounded-lg overflow-hidden"
@@ -143,16 +147,24 @@
             <button
               type="button"
               on:click={resetForm}
-              class="absolute top-2 right-2 bg-red-500 text-white rounded-full size-8 flex items-center justify-center hover:bg-red-600"
+              class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full size-8 text-2xl flex items-center justify-center pb-1 cursor-pointer duration-200"
             >
-              x
+              ×
             </button>
 
             <!-- Написать функцию очистики превьюшки и выбранной фотки -->
           </div>
         {:else}
           <!-- Надо добавить блок размер в превью фото, по клику на который будет открываться finder -->
-          <label for="img_src"></label>
+
+          <label
+            for="img_src"
+            class="flex justify-center items-center text-6xl text-blue-500 relative w-full h-48 border-2 border-dashed border-blue-500 rounded-lg cursor-pointer"
+          >
+            +
+          </label>
+
+          <!-- <label for="img_src"></label> -->
         {/if}
 
         <input
@@ -168,7 +180,7 @@
       <button
         type="submit"
         class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-		disabled={isUploading || !new_image_title || !selectedImage}
+        disabled={isUploading || !new_image_title || !selectedImage}
       >
         {isUploading ? "Uploading..." : "Upload"}
       </button>

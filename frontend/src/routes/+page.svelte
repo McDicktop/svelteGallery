@@ -8,20 +8,7 @@
 
   let isModalOpen = false;
 
-  // const fetchData = async () => {
-  //   const res = await getImages();
 
-  //   if (res.length > 0) {
-  //     images.set(res);
-  //     return;
-  //   }
-
-  //   console.log(res.message);
-  // };
-
-  // onMount(async () => {
-  //   await fetchData();
-  // });
 </script>
 
 <main>
@@ -40,11 +27,9 @@
     {/each}
   </div>
 
-  <Plus />
+  <!-- <Plus /> -->
 
-  <button on:click={() => (isModalOpen = true)}>
-    Открыть модальное окно
-  </button>
+
 </main>
 
 <Modal
