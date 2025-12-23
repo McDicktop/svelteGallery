@@ -1,0 +1,62 @@
+# --------------------
+# Node / npm / pnpm / yarn
+# --------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --------------------
+# Build / output
+# --------------------
+dist/
+build/
+.vite/
+.svelte-kit/
+.out/
+.output/
+
+# --------------------
+# Env files
+# --------------------
+.env
+.env.*
+!.env.example
+
+# --------------------
+# OS / Editor
+# --------------------
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+
+# WebStorm / IntelliJ
+.idea/
+
+# --------------------
+# Logs
+# --------------------
+logs/
+*.log
+
+# --------------------
+# Cache
+# --------------------
+.cache/
+.eslintcache
+.turbo/
+
+# --------------------
+# Tests / coverage
+# --------------------
+coverage/
+
+# --------------------
+# Temporary files
+# --------------------
+*.tmp
+*.temp
