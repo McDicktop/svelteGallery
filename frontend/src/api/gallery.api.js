@@ -6,6 +6,8 @@ const backend_url = "http://localhost:3000/"
 export const getImages = async () => {
     try {
         const res = await axios.get(backend_url);
+        console.log(res)
+        
         return res.data;
     } catch (e) {
         console.error(e);

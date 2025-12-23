@@ -3,23 +3,25 @@
   import { images } from "$lib/store";
   import { onMount } from "svelte";
   import Modal from "$lib/components/Modal.svelte";
+  
+  import { Plus } from "@lucide/svelte";
 
   let isModalOpen = false;
 
-  const fetchData = async () => {
-    const res = await getImages();
+  // const fetchData = async () => {
+  //   const res = await getImages();
 
-    if (res.length > 0) {
-      images.set(res);
-      return;
-    }
+  //   if (res.length > 0) {
+  //     images.set(res);
+  //     return;
+  //   }
 
-    console.log(res.message);
-  };
+  //   console.log(res.message);
+  // };
 
-  onMount(async () => {
-    await fetchData();
-  });
+  // onMount(async () => {
+  //   await fetchData();
+  // });
 </script>
 
 <main>
@@ -37,6 +39,8 @@
       </div>
     {/each}
   </div>
+
+  <Plus />
 
   <button on:click={() => (isModalOpen = true)}>
     Открыть модальное окно
