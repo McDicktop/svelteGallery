@@ -1,14 +1,6 @@
 <script>
   import { getImages } from "../api/gallery.api";
   import { images } from "$lib/store";
-  import { onMount } from "svelte";
-  import Modal from "$lib/components/Modal.svelte";
-  
-  import { Plus } from "@lucide/svelte";
-
-  let isModalOpen = false;
-
-
 </script>
 
 <main>
@@ -26,19 +18,4 @@
       </div>
     {/each}
   </div>
-
-  <!-- <Plus /> -->
-
-
 </main>
-
-<Modal
-  bind:isOpen={isModalOpen}
-  title="Заголовок окна"
-  on:close={() => {
-    console.log("модальное окно закрыто");
-  }}
->
-  <p>Текст модального окна</p>
-  <p>Текст модального окна</p>
-</Modal>

@@ -1,17 +1,17 @@
 <script>
   import { goto } from "$app/navigation";
-  import Modal from "$lib/components/Modal.svelte";
   import { images } from "$lib/store";
-  import { postImage } from "../../api/gallery.api";
+  import { postImage, getImageById, deleteImage } from "../../api/gallery.api";
+  import Modal from "$lib/components/Modal.svelte";
 
   let isModalOpen = false;
   let new_image_title = "";
   let selectedImage = null;
   let previewUrl = null;
   let isUploading = false;
+  let selected = [];
 
   function handleImageSelect(e) {
-    console.log(e.target.files[0]);
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -52,10 +52,14 @@
 
       // дома дописать обновление стора images 'refresh'
 
+      if (result.data) {
+        images.update((i) => [...i, result.data]);
+      }
+
       isModalOpen = false;
       resetForm();
 
-      alert("Изображение успешно загружено");
+      // alert("Изображение успешно загружено");
     } catch (error) {
       console.error("Ошибка загрузки: ", error);
       alert("Ошибка при загрузке изображения");
@@ -73,10 +77,6 @@
       previewUrl = null;
     }
   }
-
-  // function handleModalClose() {
-  //   resetForm();
-  // }
 </script>
 
 <main>
@@ -89,22 +89,50 @@
     >
       New
     </button>
-    <!-- <button
-      class="rounded-xl w-28 h-10 bg-neutral-200 hover:bg-neutral-300 cursor-pointer duration-200"
-      >Delete</button
-    > -->
+    <button
+      class="rounded-xl w-28 h-10 bg-neutral-200 hover:bg-neutral-300 cursor-pointer duration-200 disabled:bg-neutral-100 disabled:cursor-not-allowed"
+      on:click={async () => {
+        // console.log(selected);
+        const res = await getImageById(selected[0]);
+        if (res.message === "Success") {
+          console.log(res);
+          await deleteImage({
+            id: res.image._id,
+            filename: res.image.filename,
+          });
+        }
+      }}
+      disabled={selected.length === 0}
+    >
+      Delete
+    </button>
   </div>
+
   <div class="flex flex-col gap-2 p-2">
     {#each $images as image}
       <div
-        class="flex p-2 gap-4 cursor-pointer bg-neutral-200 hover:bg-neutral-300 rounded-2xl duration-200"
+        class="flex items-center p-2 gap-4 cursor-pointer bg-neutral-200 hover:bg-neutral-300 rounded-2xl duration-200"
       >
+        <input
+          type="checkbox"
+          name=""
+          id=""
+          on:change={(e) => {
+            if (e.target.checked) {
+              selected = [...selected, image._id];
+            } else {
+              selected = selected.filter((item) => item !== image._id);
+            }
+          }}
+          class="size-4"
+        />
+
         <img
           class="w-20 h-20 rounded-xl"
           src={image.filename}
           alt={image.title}
         />
-        <p>{image.title}</p>
+        <p class="">{image.title}</p>
       </div>
     {/each}
   </div>
@@ -163,8 +191,6 @@
           >
             +
           </label>
-
-          <!-- <label for="img_src"></label> -->
         {/if}
 
         <input

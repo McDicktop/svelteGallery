@@ -6,8 +6,6 @@ const backend_url = "http://localhost:3000/"
 export const getImages = async () => {
     try {
         const res = await axios.get(backend_url);
-        console.log(res)
-        
         return res.data;
     } catch (e) {
         console.error(e);
@@ -35,6 +33,12 @@ export const postImage = async (formData) => {
     }
 }
 
-export const deleteImage = async () => {
-
+export const deleteImage = async (body) => {
+    try {
+        const deleted = await axios.delete(body);
+        return deleted
+    } catch (e) {
+        console.error(e);
+        return e;
+    }
 }

@@ -1,14 +1,12 @@
 <script>
   import "./layout.css";
-  import { page } from "$app/stores";
+  // import { page } from "$app/stores";
   import { onMount } from "svelte";
   import { images } from "$lib/store";
   import { getImages } from "../api/gallery.api";
 
   const fetchData = async () => {
     const res = await getImages();
-
-	console.log(res)
 
     if (res.length > 0) {
       images.set(res);
