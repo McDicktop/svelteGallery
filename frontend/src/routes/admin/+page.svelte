@@ -29,6 +29,16 @@
     previewUrl = URL.createObjectURL(file);
   }
 
+  function resetForm() {
+    new_image_title = "";
+    selectedImage = null;
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+    }
+  }
+
   async function handleSubmit() {
     if (!new_image_title.trim()) {
       alert("Введите название изображения");
@@ -54,12 +64,13 @@
 
       if (result.data) {
         images.update((i) => [...i, result.data]);
+        isModalOpen = false;
+        resetForm();
+        return;
       }
 
-      isModalOpen = false;
-      resetForm();
-
-      // alert("Изображение успешно загружено");
+      console.log(result?.response?.data?.message);
+      alert(`Ошибка загрузки: ${result?.response?.data?.message}`);
     } catch (error) {
       console.error("Ошибка загрузки: ", error);
       alert("Ошибка при загрузке изображения");
@@ -68,14 +79,28 @@
     }
   }
 
-  function resetForm() {
-    new_image_title = "";
-    selectedImage = null;
+  async function deleteImages(array) {
+    const deleted = [];
 
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      previewUrl = null;
+    for (const id of array) {
+      try {
+        const res = await getImageById(id);
+
+        if (res.message === "Success") {
+          await deleteImage({
+            id: res.image._id,
+            filename: res.image.filename,
+          });
+          deleted.push(id);
+        }
+      } catch (error) {
+        console.error(`Ошибка при обработке ${id}:`, error);
+      }
     }
+
+    images.update((i) => i.filter((item) => !deleted.includes(item._id)));
+
+    selected = [];
   }
 </script>
 
@@ -91,17 +116,7 @@
     </button>
     <button
       class="rounded-xl w-28 h-10 bg-neutral-200 hover:bg-neutral-300 cursor-pointer duration-200 disabled:bg-neutral-100 disabled:cursor-not-allowed"
-      on:click={async () => {
-        // console.log(selected);
-        const res = await getImageById(selected[0]);
-        if (res.message === "Success") {
-          console.log(res);
-          await deleteImage({
-            id: res.image._id,
-            filename: res.image.filename,
-          });
-        }
-      }}
+      on:click={async () => await deleteImages(selected)}
       disabled={selected.length === 0}
     >
       Delete
@@ -124,7 +139,8 @@
               selected = selected.filter((item) => item !== image._id);
             }
           }}
-          class="size-4"
+          class="size-4 cursor-pointer"
+          checked={selected.includes(image._id)}
         />
 
         <img
@@ -137,14 +153,7 @@
     {/each}
   </div>
 
-  <Modal
-    bind:isOpen={isModalOpen}
-    title="Add new"
-    on:close={() => {
-      // new_image_title = "";
-      resetForm();
-    }}
-  >
+  <Modal bind:isOpen={isModalOpen} title="Add new" on:close={resetForm}>
     <form on:submit|preventDefault={handleSubmit} class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
         <label for="img_title" class="font-medium">Image title</label>

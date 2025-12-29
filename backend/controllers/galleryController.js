@@ -37,7 +37,6 @@ class GalleryController {
         });
       }
 
-      //   return res.status(200).send(image);
       return res.status(200).json({
         message: "Success",
         image,
@@ -106,7 +105,7 @@ class GalleryController {
     }
   }
 
- 
+
 
   async deleteImage(req, res) {
     try {

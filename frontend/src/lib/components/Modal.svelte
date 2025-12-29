@@ -2,13 +2,11 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { browser } from "$app/environment";
 
-  // import { Skull, X } from '@lucide/svelte';
-
   export let isOpen = false;
   export let title = "";
   export let showCloseButton = true;
-  export let closeOnOutsideClick = true; // ЗАЧЕМ
-  export let closeOnEscape = true; // ЗАЧЕМ
+  export let closeOnOutsideClick = true;
+  export let closeOnEscape = true;
 
   const dispatch = createEventDispatcher();
 
@@ -18,7 +16,6 @@
   }
 
   function handleBackdropClick(e) {
-    console.log(e.target, e.currentTarget);
     if (closeOnOutsideClick && e.target === e.currentTarget) {
       close();
     }
@@ -67,7 +64,6 @@
           {/if}
 
           {#if showCloseButton}
-            <!-- <button class="size-4 bg-black" on:click={close}> </button> -->
             <button class="size-6" on:click={close}>×</button>
           {/if}
         </div>

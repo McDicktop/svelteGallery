@@ -1,6 +1,4 @@
 import axios from "axios";
-
-// const backend_url = "http://127.0.0.1:8080/"
 const backend_url = "http://localhost:3000/"
 
 export const getImages = async () => {
@@ -33,9 +31,11 @@ export const postImage = async (formData) => {
     }
 }
 
-export const deleteImage = async (body) => {
+export const deleteImage = async (data) => {
     try {
-        const deleted = await axios.delete(body);
+        const deleted = await axios.delete(backend_url, {
+            data
+        });
         return deleted
     } catch (e) {
         console.error(e);
